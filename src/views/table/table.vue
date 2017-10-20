@@ -34,20 +34,34 @@
           style="width: 100%">
           <el-table-column type="selection">
           </el-table-column>
+          
           <el-table-column
             prop="date"
             label="注册日期"
             width="180">
           </el-table-column>
+
           <el-table-column
             prop="name"
             label="公司"
             width="180">
           </el-table-column>
+
           <el-table-column
             prop="address"
             label="地址">
           </el-table-column>
+
+           <!-- <el-table-column
+            prop="fileNumber"
+            label="文件">
+          </el-table-column> -->
+
+
+
+
+
+
           <el-table-column label="操作">
             <template scope="scope">
               <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -56,23 +70,7 @@
           </el-table-column>
         </el-table>
 
-         <!-- <div v-show="!listLoading" class="pagination-container">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
-              :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
-        </div> -->
-
-        <!-- <div align="center">
-              <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-sizes="[10, 20, 30, 40]"
-                  :page-size="pagesize"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="totalCount">
-              </el-pagination>
-          </div> -->
+         
 
            <div class="block">
               <!-- <span class="demonstration">完整功能</span> -->
@@ -88,19 +86,6 @@
               </el-pagination>
             </div>
 
-
-
-
-        <!-- <div class="block">
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-size="5"
-            layout="prev, pager, next, jumper"
-            :total="20">
-          </el-pagination>
-        </div> -->
 
 
       </el-col>
@@ -136,7 +121,7 @@
 </template>
 <script type="text/ecmascript-6">
 
-  import  tableData from '../static/data.json';
+  //import  tableData from '../static/data.json';
 
   const ERR_OK = "200";
   export default {
@@ -156,9 +141,9 @@
         //搜索条件
         criteria: '',
         //默认每页数据量
-        pageSize: 5,
+        pageSize: 20,
     //默认每页数据量
-        pagecount: 10,
+        pagecount: 100,
 
         //默认高亮行数据id
         highlightId: -1,
@@ -190,21 +175,23 @@
     created () {
       //this.tableData = tableData;
        //this.$http.get('/api/getTable').then((response) => {
-         // this.$http.get('./static/data.json').then((response) => {       
-      this.$http.get('http://localhost:3000/tableData?_start=0&_end=10').then((response) => {       
+         // this.$http.get('./static/data.json').then((response) => {    
+        var val =  this.currentPage;
+        console.log(`当前页: ${val}`);
+        var start = (val -1) *  this.pageSize ;
+        var endpage = val  * this.pageSize;
+        console.log(`start: ${start}`);  
+        console.log(`endpage: ${endpage}`);                    
+        this.$http.get(`http://localhost:3000/tableData?_start=${start}&_end=${endpage}`).then((response) => {       
+           
+
+      // this.$http.get('http://localhost:3000/tableData?_start=0&_end=10').then((response) => {       
         if (response.status === 200) {
           
           console.log(response);
           var data = response.data ;
-          this.totalCount = data.length;         
-
-
-
+          this.totalCount = data.length;  
           this.tableData = response.data; 
-
-
-          
-          
 
 
         }
@@ -362,14 +349,22 @@
         obj.download = "download.csv";
       },
       handleSizeChange(val) {
-        this.pageSize = val ;
+        //this.pageSize = val ;
+        this.pageSize = val;
 
-        // console.log(`每页 ${val} 条`);
-        // this.$http.get('http://localhost:3000/tableData?_start=0&_end=10').then((response) => {       
-        //   if (response.status === 200) {
-        //     this.tableData = response.data;          
-        //   }
-        // });
+         val = this.currentPage ;
+        console.log(`当前页: ${val}`);
+        var start = (val -1) *  this.pageSize ;
+        var endpage = val  * this.pageSize;
+
+        console.log(`start: ${start}`);  
+        console.log(`endpage: ${endpage}`);  
+         console.log(`每页 : ${this.pageSize}`);             
+        this.$http.get(`http://localhost:3000/tableData?_start=${start}&_end=${endpage}`).then((response) => {       
+          if (response.status === 200) {
+            this.tableData = response.data;          
+          }
+        });
 
 
       },
@@ -378,12 +373,8 @@
         console.log(`当前页: ${val}`);
         var start = (val -1) *  this.pageSize ;
         var endpage = val  * this.pageSize;
-
         console.log(`start: ${start}`);  
-        console.log(`endpage: ${endpage}`);  
-        
-              
-      
+        console.log(`endpage: ${endpage}`);                    
         this.$http.get(`http://localhost:3000/tableData?_start=${start}&_end=${endpage}`).then((response) => {       
           if (response.status === 200) {
             this.tableData = response.data;          

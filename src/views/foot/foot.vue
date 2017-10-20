@@ -21,11 +21,11 @@ footer {
    
 	height: 50px;
 	width: 100%;
-	background-color: #FFFFFF;
+	/* background-color: #FFFFFF; */
 	line-height: 50px;
 	text-align: center;
-	box-sizing: border-box;
-	border-top: 1px solid #CCCCCC;
+	/* box-sizing: border-box; */
+	/* border-top: 1px solid #CCCCCC; */
 
     
 }
