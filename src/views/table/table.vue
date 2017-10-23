@@ -137,7 +137,7 @@
         },
         tableData: [],
         //请求的URL
-        url:'http://localhost:3000/tableData',
+        url:'http://ET01:3000/tableData',
         //搜索条件
         criteria: '',
         //默认每页数据量
@@ -182,7 +182,7 @@
         var endpage = val  * this.pageSize;
         console.log(`start: ${start}`);  
         console.log(`endpage: ${endpage}`);                    
-        this.$http.get(`http://localhost:3000/tableData?_start=${start}&_end=${endpage}`).then((response) => {       
+        this.$http.get(this.url + `?_start=${start}&_end=${endpage}`).then((response) => {       
            
 
       // this.$http.get('http://localhost:3000/tableData?_start=0&_end=10').then((response) => {       
@@ -240,7 +240,9 @@
 
          var where = ''  ;
          where = '/?name_like=' + name ;    
-         this.$http.get('http://localhost:3000/tableData' + where ).then((response) => {       
+         // this.$http.get(`${url}?_start=${start}&_end=${endpage}`).then((response) => {       
+        
+         this.$http.get(`${url}` + where ).then((response) => {       
           if (response.status === 200) { 
             var data = response.data ;
             this.totalCount = data.length;       
@@ -252,7 +254,7 @@
       },
 
       handleDelete (index, row) {
-        this.$http.delete('http://localhost:3000/tableData/' + row.id ).then((response) => {  
+        this.$http.delete(`${url}` +'/' + row.id ).then((response) => {  
         if (response.status === 200) {
             this.tableData.splice(index, 1);
             this.$message({
@@ -286,7 +288,7 @@
 
 
            if (this.table_index === -1) {
-             this.$http.post('http://localhost:3000/tableData/', 
+             this.$http.post(`${url}`, 
            {     
               "name": this.form.name,
               "address": this.form.address,
@@ -305,7 +307,8 @@
 
 
            } else {
-                this.$http.put('http://localhost:3000/tableData/' + this.form.id, 
+             
+                this.$http.put(this.url + '/' + this.form.id, 
               {     
                   "name": this.form.name,
                   "address": this.form.address,
@@ -359,8 +362,10 @@
 
         console.log(`start: ${start}`);  
         console.log(`endpage: ${endpage}`);  
-         console.log(`每页 : ${this.pageSize}`);             
-        this.$http.get(`http://localhost:3000/tableData?_start=${start}&_end=${endpage}`).then((response) => {       
+         console.log(`每页 : ${this.pageSize}`);    
+        this.$http.get(this.url + `?_start=${start}&_end=${endpage}`).then((response) => {       
+                  
+        //this.$http.get(`http://localhost:3000/tableData?_start=${start}&_end=${endpage}`).then((response) => {       
           if (response.status === 200) {
             this.tableData = response.data;          
           }
@@ -374,8 +379,10 @@
         var start = (val -1) *  this.pageSize ;
         var endpage = val  * this.pageSize;
         console.log(`start: ${start}`);  
-        console.log(`endpage: ${endpage}`);                    
-        this.$http.get(`http://localhost:3000/tableData?_start=${start}&_end=${endpage}`).then((response) => {       
+        console.log(`endpage: ${endpage}`); 
+        this.$http.get(this.url + `?_start=${start}&_end=${endpage}`).then((response) => {       
+                           
+        //this.$http.get(`http://localhost:3000/tableData?_start=${start}&_end=${endpage}`).then((response) => {       
           if (response.status === 200) {
             this.tableData = response.data;          
           }

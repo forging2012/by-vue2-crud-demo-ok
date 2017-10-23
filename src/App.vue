@@ -50,6 +50,10 @@
 <script>
   import header from './views/header/header.vue';
    import foot from './views/foot/foot.vue';
+   import promise from 'es6-promise';
+
+   
+promise.polyfill();
 
 
 
